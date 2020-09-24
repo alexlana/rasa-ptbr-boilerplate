@@ -1,0 +1,25 @@
+  # ================================= Actions =================================
+  # Rasa middleware used to connect with external APIs.
+  actions:
+    build:
+      context: .
+      dockerfile: ./docker/actions.Dockerfile
+    ports:
+      - 5055:5055
+    volumes:
+      - ./bot/actions:/bot/actions
+    command: sh -c "make actions"
+
+  # ============================ WebChat Bot =================================
+  # Specific Rasa bot integrated with WebChat.
+  bot-webchat:
+      build:
+        context: .
+        dockerfile: ./docker/bot.Dockerfile
+      volumes:
+        - ./bot/:/bot/
+      ports:
+        - 5005:5005
+      depends_on:
+        - actions
+      command: sh -c "make webchat"
